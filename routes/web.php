@@ -22,6 +22,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::permanentRedirect('/home',  env('FRONTEND_URL'));
-
 require __DIR__.'/auth.php';
