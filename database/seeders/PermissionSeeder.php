@@ -11,7 +11,7 @@ use Spatie\Permission\PermissionRegistrar;
 class PermissionSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed the different roles and permissions to db.
      *
      * @return void
      */
@@ -20,6 +20,7 @@ class PermissionSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
+            'post_show',
             'post_upload',
             'post_update',
             'post_delete',
@@ -30,8 +31,10 @@ class PermissionSeeder extends Seeder
                 'name' => $permission
             ]);
         }
-        $role = Role::create(['name' => 'Admin']);
-        $role->syncPermissions($permissions);
+        $admin = Role::create(['name' => 'Admin']);
+        $admin->syncPermissions($permissions);
 
+        $guest = Role::create(['name' => 'Guest']);
+        $guest->givePermissionTo($permissions[0]);
     }
 }

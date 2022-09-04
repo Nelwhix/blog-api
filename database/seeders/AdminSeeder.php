@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class AdminSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * adding admins.
      *
      * @return void
      */
