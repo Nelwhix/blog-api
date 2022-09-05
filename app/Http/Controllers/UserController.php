@@ -5,26 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
      * Receive google callback and login user
      *
+     * @param \Illuminate\Http\Request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function authenticate()
+    public function authenticate(Request $request)
     {
-        $googleUser = Socialite::driver('google')->user();
 
         $user = User::updateOrCreate([
-            'google_id' => $googleUser->id,
+            'google_id' => $request->id,
         ], [
-            'name' => $googleUser->name,
-            'email' => $googleUser->email,
+            'name' => $request->name,
+            'email' => $request->email,
+            'email_verified_at' => now(),
+            'password' => Hash::make($request->id),
         ])->assignRole('guest');
-
 
         Auth::login($user);
 
