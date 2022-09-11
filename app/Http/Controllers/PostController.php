@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -86,6 +87,16 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function upload(Request $request) {
+        // upload the file to s3
+        $file = $request->file('postImages');
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('postImages/', $fileName, 's3');
 
+        // get the file link
+        $url = Storage::disk('s3')->url('postImages/'. $fileName);
+
+        return response([
+            'url' => $url
+        ]);
     }
 }
