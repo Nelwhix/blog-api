@@ -26,7 +26,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->user()->hasRole('admin')) {
+        if (!$request->user()->hasRole('Admin')) {
             return response([
                 'message' => 'You are not authorized to publish post'
             ], 403);
@@ -35,15 +35,44 @@ class PostController extends Controller
         $formFields = $request->validate([
             'blogTitle' => 'required',
             'coverPhotoName' => 'required',
+            'coverPhotoURL' => 'required',
             'blogHTML' => 'required',
         ]);
 
-        $formFields['blogPhoto'] = $request->file('blogPhoto')->store('coverPhotos', 's3');
+//        $file = $request->file('blogPhoto');
+//        $fileName = $file->getClientOriginalName();
+//        $file->storeAs('coverPhotos/', $fileName, 's3');
+//
+//        $url = Storage::disk('s3')->url('coverPhotos/'. $fileName);
+//
+//        $formFields['coverPhotoURL'] = $url;
+
+
         Post::create($formFields);
 
         return response([
             'message' => 'Post created successfully'
         ], 201);
+    }
+
+    /**
+     * Upload images on the quill editor to S3
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Request $request) {
+        // upload the file to s3
+        $file = $request->file('postImages');
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('postImages/', $fileName, 's3');
+
+        // get the file link
+        $url = Storage::disk('s3')->url('postImages/'. $fileName);
+
+        return response([
+            'url' => $url
+        ]);
     }
 
     /**
@@ -78,25 +107,5 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Upload images on the quill editor to S3
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function upload(Request $request) {
-        // upload the file to s3
-        $file = $request->file('postImages');
-        $fileName = $file->getClientOriginalName();
-        $file->storeAs('postImages/', $fileName, 's3');
-
-        // get the file link
-        $url = Storage::disk('s3')->url('postImages/'. $fileName);
-
-        return response([
-            'url' => $url
-        ]);
     }
 }

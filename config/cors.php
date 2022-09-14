@@ -9,7 +9,7 @@ return [
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['XMLHttpRequest', 'x-xsrf-token', 'x-requested-with', 'content-type'],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
