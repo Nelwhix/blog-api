@@ -17,5 +17,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::post('/upload-image', [PostController::class, 'upload']);
+Route::get('/posts', [PostController::class, 'index']);
 
 require __DIR__.'/auth.php';

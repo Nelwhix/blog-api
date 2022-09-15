@@ -15,7 +15,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::latest()->take(10)->get();
+
+        return response([
+            'blogPosts' => $posts
+        ]);
     }
 
     /**
@@ -35,17 +39,16 @@ class PostController extends Controller
         $formFields = $request->validate([
             'blogTitle' => 'required',
             'coverPhotoName' => 'required',
-            'coverPhotoURL' => 'required',
             'blogHTML' => 'required',
         ]);
 
-//        $file = $request->file('blogPhoto');
-//        $fileName = $file->getClientOriginalName();
-//        $file->storeAs('coverPhotos/', $fileName, 's3');
-//
-//        $url = Storage::disk('s3')->url('coverPhotos/'. $fileName);
-//
-//        $formFields['coverPhotoURL'] = $url;
+        $file = $request->file('blogPhoto');
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('coverPhotos/', $fileName, 's3');
+
+        $url = Storage::disk('s3')->url('coverPhotos/'. $fileName);
+
+        $formFields['coverPhotoURL'] = $url;
 
 
         Post::create($formFields);
@@ -64,7 +67,7 @@ class PostController extends Controller
     public function upload(Request $request) {
         // upload the file to s3
         $file = $request->file('postImages');
-        $fileName = $file->getClientOriginalName();
+        $fileName = $file->getClientOriginalName(). mt_rand(1, 1000000);
         $file->storeAs('postImages/', $fileName, 's3');
 
         // get the file link

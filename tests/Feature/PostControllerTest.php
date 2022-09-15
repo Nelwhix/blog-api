@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Post;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Database\Events\MigrationsEnded;
 use Illuminate\Support\Facades\Event;
@@ -16,7 +15,6 @@ beforeEach(function () {
         $this->app->make(PermissionRegistrar::class)->forgetCachedPermissions();
     });
 });
-
 
 it('can store posts', function () {
     adminLogin()->post('/upload-post', [
