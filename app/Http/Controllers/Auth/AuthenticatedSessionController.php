@@ -40,4 +40,18 @@ class AuthenticatedSessionController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * Return current user and admin status
+     *
+     * @param \Illuminate\Http\Request $request
+     */
+    public function user(Request $request) {
+        $isAdmin = (bool)$request->user()->hasRole('Admin');
+
+        return response([
+            'currentUser' => $request->user(),
+            'isAdmin' => $isAdmin,
+        ], 200);
+    }
 }

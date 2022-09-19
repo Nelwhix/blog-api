@@ -81,12 +81,20 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        if ($post === null) {
+            return response([
+                'message' => 'no post matching this ID was found'
+            ], 404);
+        }
+
+        return response([
+            'post' => $post
+        ], 200);
     }
 
     /**

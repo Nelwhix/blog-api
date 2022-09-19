@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * Receive google callback and login user
+     * Receive google callback
      *
      * @param \Illuminate\Http\Request
      *
@@ -18,8 +18,7 @@ class UserController extends Controller
      */
     public function authenticate(Request $request)
     {
-
-        $user = User::updateOrCreate([
+        User::updateOrCreate([
             'google_id' => $request->id,
         ], [
             'name' => $request->name,
@@ -27,8 +26,6 @@ class UserController extends Controller
             'email_verified_at' => now(),
             'password' => Hash::make($request->id),
         ])->assignRole('guest');
-
-        Auth::login($user);
 
         return response([
             'message' => 'User logged in successfully'
