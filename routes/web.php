@@ -14,11 +14,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/upload-post', [PostController::class, 'store']);
 
-    Route::delete('/delete-post', [PostController::class, 'destroy']);
+    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 });
 
 Route::post('/upload-image', [PostController::class, 'upload']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
+
+Route::get('/ping', function () {
+    return response("pong @". \Carbon\Carbon::now() . "UTC", 200);
+});
 
 require __DIR__.'/auth.php';

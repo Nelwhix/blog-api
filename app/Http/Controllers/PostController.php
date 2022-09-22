@@ -112,11 +112,14 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        Storage::disk('s3')->delete('coverPhotos/'. $post->coverPhotoName);
+        $post->delete();
+
+        return response("Post deleted successfully", 200);
     }
 }
