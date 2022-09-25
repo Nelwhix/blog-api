@@ -38,7 +38,6 @@ class PostController extends Controller
 
         $formFields = $request->validate([
             'blogTitle' => 'required',
-            'coverPhotoName' => 'required',
             'blogHTML' => 'required',
         ]);
 
@@ -49,6 +48,7 @@ class PostController extends Controller
         $url = Storage::disk('s3')->url('coverPhotos/'. $fileName);
 
         $formFields['coverPhotoURL'] = $url;
+        $formFields['coverPhotoName'] = $fileName;
 
 
         Post::create($formFields);
@@ -100,13 +100,33 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Post $post
+     * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $formFields = $request->validate([
+            'blogTitle' => 'required',
+            'blogHTML' => 'required',
+        ]);
+
+        if ($request->hasFile('blogPhoto')) {
+            $file = $request->file('blogPhoto');
+            $fileName = $file->getClientOriginalName();
+            $file->storeAs('coverPhotos/', $fileName, 's3');
+
+            $url = Storage::disk('s3')->url('coverPhotos/'. $fileName);
+
+            $formFields['coverPhotoURL'] = $url;
+            $formFields['coverPhotoName'] = $fileName;
+        }
+
+
+        $post->update($formFields);
+
+        return response('Post updated successfully', 201);
     }
 
     /**

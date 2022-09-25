@@ -15,6 +15,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/upload-post', [PostController::class, 'store']);
 
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+
+    Route::put('/posts/{post}', [PostController::class, 'update']);
+
 });
 
 Route::post('/upload-image', [PostController::class, 'upload']);
