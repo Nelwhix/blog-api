@@ -75,7 +75,7 @@ class PostController extends Controller
 
         return response([
             'url' => $url
-        ]);
+        ], 201);
     }
 
     /**

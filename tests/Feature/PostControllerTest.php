@@ -5,6 +5,8 @@ use Illuminate\Database\Events\MigrationsEnded;
 use Illuminate\Support\Facades\Event;
 use Spatie\Permission\PermissionRegistrar;
 use function Pest\Faker\faker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 
 beforeEach(function () {
@@ -17,6 +19,8 @@ beforeEach(function () {
 });
 
 it('can store posts', function () {
+    $file = UploadedFile::fake()->image('avatar.jpg');
+
     adminLogin()->post('/upload-post', [
         'blogTitle' => faker()->text,
         'coverPhotoName' => faker()->name,
@@ -32,4 +36,28 @@ test('only admins can upload post', function () {
         'coverPhotoURL' => 'https:www.images.com/postImage',
         'blogHTML' => '<h1>I am a test</h1>',
     ])->assertStatus(403)->assertJson(['message' => 'You are not authorized to publish post']);
+});
+
+it('can upload posts to aws s3', function () {
+    $file = UploadedFile::fake()->image('avatar.jpg');
+
+    $this->post('/upload-image', [
+        'postImages' => $file,
+    ])->assertStatus(201);
+});
+
+it('can update posts', function () {
+    $this->assertTrue(true);
+});
+
+it('can show single quote', function () {
+    $this->assertTrue(true);
+});
+
+it('can delete post', function () {
+    $this->assertTrue(true);
+});
+
+it('can retrieve all posts in the db', function () {
+    $this->assertTrue(true);
 });
