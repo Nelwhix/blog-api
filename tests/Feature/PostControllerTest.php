@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Event;
 use Spatie\Permission\PermissionRegistrar;
 use function Pest\Faker\faker;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 
 beforeEach(function () {
@@ -23,8 +22,7 @@ it('can store posts', function () {
 
     adminLogin()->post('/upload-post', [
         'blogTitle' => faker()->text,
-        'coverPhotoName' => faker()->name,
-        'coverPhotoURL' => 'https:www.images.com/postImage',
+        'blogPhoto' => $file,
         'blogHTML' => '<h1>I am a test</h1>',
     ])->assertStatus(201)->assertJson(['message' => 'Post created successfully']);
 });
@@ -50,7 +48,7 @@ it('can update posts', function () {
     $this->assertTrue(true);
 });
 
-it('can show single quote', function () {
+it('can show single post', function () {
     $this->assertTrue(true);
 });
 
