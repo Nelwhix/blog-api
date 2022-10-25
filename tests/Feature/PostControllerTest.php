@@ -56,6 +56,6 @@ it('can delete post', function () {
     $this->assertTrue(true);
 });
 
-it('can retrieve all posts in the db', function () {
+it('can retrieve latest posts', function () {
     $this->assertTrue(true);
 });
