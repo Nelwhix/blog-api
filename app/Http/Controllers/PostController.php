@@ -67,14 +67,14 @@ class PostController extends Controller
     public function upload(Request $request) {
         // upload the file to s3
         $file = $request->file('postImages');
-        $fileName = $file->getClientOriginalName(). mt_rand(1, 1000000);
+        $fileName = $file->getClientOriginalName();
         $file->storeAs('postImages/', $fileName, 's3');
 
         // get the file link
         $url = Storage::disk('s3')->url('postImages/'. $fileName);
 
         return response([
-            'url' => $url
+            'imageUrl' => $url
         ], 201);
     }
 
@@ -86,7 +86,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        if ($post === null) {
+        if (!$post->exists) {
             return response([
                 'message' => 'no post matching this ID was found'
             ], 404);

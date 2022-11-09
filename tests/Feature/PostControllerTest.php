@@ -25,7 +25,7 @@ it('can store posts', function () {
         'blogPhoto' => $file,
         'blogHTML' => '<h1>I am a test</h1>',
     ])->assertStatus(201)->assertJson(['message' => 'Post created successfully']);
-});
+})->skip();
 
 test('only admins can upload post', function () {
     login()->post('/upload-post', [
@@ -34,7 +34,7 @@ test('only admins can upload post', function () {
         'coverPhotoURL' => 'https:www.images.com/postImage',
         'blogHTML' => '<h1>I am a test</h1>',
     ])->assertStatus(403)->assertJson(['message' => 'You are not authorized to publish post']);
-});
+})->skip();
 
 it('can upload posts to aws s3', function () {
     $file = UploadedFile::fake()->image('avatar.jpg');
@@ -42,10 +42,19 @@ it('can upload posts to aws s3', function () {
     $this->post('/upload-image', [
         'postImages' => $file,
     ])->assertStatus(201);
-});
+})->skip();
 
 it('can update posts', function () {
-    $this->assertTrue(true);
+    $file = UploadedFile::fake()->image('avatar.jpg');
+    $file2 = UploadedFile::fake()->image('avatar2.jpg');
+
+    adminLogin()->post('/upload-post', [
+        'blogTitle' => faker()->text,
+        'blogPhoto' => $file,
+        'blogHTML' => '<h1>I am a test</h1>',
+    ])->assertStatus(201)->assertJson(['message' => 'Post created successfully']);
+
+
 });
 
 it('can show single post', function () {
