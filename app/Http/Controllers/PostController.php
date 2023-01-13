@@ -107,6 +107,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if (!$request->user()->hasRole('Admin')) {
+            return response([
+                'message' => 'You are not authorized to update a post'
+            ], 403);
+        }
+
         $formFields = $request->validate([
             'blogTitle' => 'required',
             'blogHTML' => 'required',
@@ -126,7 +132,10 @@ class PostController extends Controller
 
         $post->update($formFields);
 
-        return response('Post updated successfully', 201);
+        return response([
+            'message' => 'Post updated successfully',
+            'post' => $post
+            ], 201);
     }
 
     /**
