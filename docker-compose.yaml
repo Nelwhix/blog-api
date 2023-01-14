@@ -1,0 +1,51 @@
+version: '3'
+
+networks:
+  laravel:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: webserver
+    ports:
+      - '8088:80'
+    volumes:
+      - ./app:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:5.7.22
+    container_name: database
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '4306:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: blog-api
+      MYSQL_USER: nelwhix
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: php
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel
+

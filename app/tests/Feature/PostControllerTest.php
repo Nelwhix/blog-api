@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\PermissionRegistrar;
 use Illuminate\Http\UploadedFile;
-use function Pest\Laravel\assertDatabaseHas;
 
 
 beforeEach(function () {
