@@ -16,11 +16,8 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $randomNum = mt_rand(1, 500);
         return [
             'blogTitle' => fake()->sentence(),
-            'coverPhotoName' => 'avatar' . $randomNum  . '.jpg',
-            'coverPhotoURL' => 'https://devleads-api.com/avatar' . $randomNum . '.jpg',
             'blogHTML' => fake()->randomHtml()
         ];
     }

@@ -11,7 +11,7 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/user', [AuthenticatedSessionController::class, 'user']);
 
-    Route::post('/upload-post', [PostController::class, 'store']);
+    Route::post('/post', [PostController::class, 'store']);
 
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
