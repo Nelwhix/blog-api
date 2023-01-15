@@ -18,7 +18,9 @@ class PostFactory extends Factory
     {
         return [
             'blogTitle' => fake()->sentence(),
-            'blogHTML' => fake()->randomHtml()
+            'blogHTML' => fake()->randomHtml(),
+            'coverPhotoName' => 'avatar.jpg',
+            'coverPhotoURL' => 'coverPhotos/avatar.jpg'
         ];
     }
 }
